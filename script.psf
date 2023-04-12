@@ -1,0 +1,939 @@
+$formNeonityXtremeShell_Load = {
+	$os = Get-CimInstance -ClassName Win32_OperatingSystem
+	$pc = Get-CimInstance -ClassName Win32_ComputerSystem
+	$cpu = Get-CimInstance -ClassName Win32_Processor
+	$gpu = Get-WmiObject Win32_VideoController
+	$label1.Text = "OS: $($os.Caption) $($os.Version)"
+	$labelPC.Text = "Model: $($pc.Manufacturer) $($pc.Model) `nProcessor: $($cpu.Name)`nGPU(s): $($gpu.Name)"
+
+	try
+	{
+		$request = [System.Net.WebRequest]::Create("http://www.google.com")
+		$request.Timeout = 5000
+		$response = $request.GetResponse()
+		if ($response.StatusCode -eq [System.Net.HttpStatusCode]::OK)
+		{
+			Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+			$Log.Text = "Welcome to XtremeShell!"			
+		}
+	}
+	catch
+	{ # nincs net
+		$Log.Text = "WARNING: No internet connection. Downloading apps will be impossible."
+	}
+	
+}
+
+$label1_Click = {
+	winver
+	
+}
+
+$picturebox1_Click = {
+	start https://neonity.hu
+}
+
+$buttonTaskbarIcons_Click = {
+	
+	explorer "shell:::{05d7b0f4-2121-4eff-bf6b-ed3f69b894d9}"
+}
+$buttonNeonityTech_Click = {
+	
+	
+	start https://youtube.com/NeonityTech
+}
+
+$buttonTwitch_Click = {
+	
+	
+	start https://youtube.com/NeonityGaming
+}
+
+$buttonDiscord_Click = {
+	
+	
+	start https://dc.neonity.hu
+}
+
+$buttonWindowsDownload_Click = {
+	
+	
+	start https://www.microsoft.com/en-us/software-download/
+}
+
+$buttonControlPanel_Click = {
+	
+	control
+	$Log.Text = "Control Panel opened"
+}
+
+$buttonRendszerbeállítások_Click = {
+	
+	sysdm.cpl
+	$Log.Text = "sysdm.cpl launched"
+}
+
+$buttonNVIDIA_Click = {
+	
+	
+	start https://www.nvidia.com/en-us/geforce/drivers/
+}
+
+$buttonAMD_Click = {
+	
+	start https://www.amd.com/en/support
+	
+}
+
+$buttonRemoveCortana_Click = {
+	
+	$Log.Text = "Please wait..."
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "CortanaConsent" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Windows Search" /v "CortanaConsent" /t REG_DWORD /d "0" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d "0" /f
+	reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d "1" /f
+	reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v "DisableVoice" /t REG_DWORD /d "1" /f
+	Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-AppxPackage
+	$Log.Text = "Cortana removed"
+}
+
+$buttonDisableTelemetry_Click = {
+	$Log.Text = "Please wait..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "ContentDeliveryAllowed" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "OemPreInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "PreInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "PreInstalledAppsEverEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338387Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338388Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-353698Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
+	reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d "0" /f
+	reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Id" /f
+	$Log.Text = "Telemetry disabled"
+}
+
+$buttonUninstallEdge_Click = {
+	
+	try
+	{
+		$request = [System.Net.WebRequest]::Create("http://www.google.com")
+		$request.Timeout = 5000
+		$response = $request.GetResponse()
+		if ($response.StatusCode -eq [System.Net.HttpStatusCode]::OK)
+		{
+			Invoke-WebRequest -UseBasicParsing https://xtremeshell.hu/EdgeUninstall.bat | Invoke-Expression
+			$Log.Text = "Loading Edge uninstaller script..."
+		}
+	}
+	catch
+	{ # nincs net
+		$Log.Text = "ERROR 12029: Failed to connect to server."
+	}
+	
+}
+$buttonStartDebloating_Click = {
+	$Log.Text = "Please wait..."
+	$BloatwareList = @(
+		"Microsoft.BingNews"
+		"Microsoft.BingWeather"
+		"Microsoft.GetHelp"
+		"Microsoft.Getstarted"
+		"Microsoft.MicrosoftOfficeHub"
+		"Microsoft.MicrosoftSolitaireCollection"
+		#"Microsoft.MicrosoftStickyNotes" / sysprep bug
+		"Microsoft.PowerAutomateDesktop"
+		"Microsoft.SecHealthUI"
+		"Microsoft.People"
+		"Microsoft.Todos"
+		#"Microsoft.Windows.Photos"
+		"Microsoft.WindowsAlarms"
+		"Microsoft.WindowsCamera"
+		"microsoft.windowscommunicationsapps"
+		"Microsoft.WindowsFeedbackHub"
+		"Microsoft.WindowsMaps"
+		"Microsoft.WindowsSoundRecorder"
+		"Microsoft.YourPhone"
+		"Microsoft.ZuneMusic"
+		"Microsoft.ZuneVideo"
+		"MicrosoftTeams"
+	)
+	foreach ($Bloat in $BloatwareList)
+	{
+		if ((Get-AppxPackage -Name $Bloat).NonRemovable -eq $false)
+		{
+			$Log.Text = "Removing $Bloat"
+			Try
+			{
+				Get-AppxPackage -Name $Bloat | Remove-AppxPackage -ErrorAction Stop | Out-Null
+				Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online -ErrorAction Stop
+			}
+			Catch
+			{
+				$Log.Text = "Failed to remove $Bloat, exception : $($_)"
+			}
+			
+		}
+	}
+	$Log.Text = "Finished debloating."
+}
+
+
+$buttonNVCleanStall_Click = {
+	
+	
+	start https://www.techpowerup.com/download/techpowerup-nvcleanstall/
+}
+
+$buttonDisablePowerThrottli_Click = {
+	$Log.Text = "Please wait..."
+	REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f
+	powercfg.exe -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+	$Log.Text = "Disabled Power Throttling"
+}
+
+$buttonEnableGameMode_Click = {
+	$Log.Text = "Please wait..."
+	If (Test-Path HKCU:\Software\Microsoft\GameBar) { Get-Item HKCU:\Software\Microsoft\GameBar | Set-ItemProperty -Name AllowAutoGameMode -Value 1 -Verbose -Force }
+	$Log.Text = "Game Mode enabled"
+}
+
+$labelFiles_Click = {
+	
+	
+}
+
+$buttonEnableClassicContext_Click = {
+	
+	$Log.Text = "Please wait..."
+	New-Item -Path "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" -Name "InprocServer32" -force -value ""
+	taskkill /f /im explorer.exe
+	Start-Sleep -Seconds 1.5
+	Start-Process explorer.exe
+	$Log.Text = "Classic context menu restored"
+}
+
+$buttonShowFileExtensions_Click = {
+	$Log.Text = "Please wait..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
+	$Log.Text = "Show File Extensions enabled"
+}
+
+$buttonDisableWindowsUpdate_Click = {
+	$Log.Text = "Please wait..."
+	sc.exe config wuauserv start=disabled
+	sc.exe stop wuauserv
+	$Log.Text = "Windows Update disabled"
+}
+
+$buttonEnableWindowsUpdate_Click = {
+	$Log.Text = "Please wait..."
+	sc.exe config wuauserv start=enabled
+	sc.exe start wuauserv
+	$Log.Text = "Windows Update enabled"
+}
+
+$buttonEnableXtremeShellCus_Click = {
+	
+	$Log.Text = "Please wait..."
+	#Disable Driver updates
+	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Force | Out-Null
+	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Force | Out-Null
+	#Disable Auto Upgrade
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Name "ExcludeWUDriversInQualityUpdate" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferFeatureUpdatesPeriodInDays" -Type DWord -Value 365
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferQualityUpdatesPeriodInDays " -Type DWord -Value 7
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "NoAutoRebootWithLoggedOnUsers" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUPowerManagement" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "BranchReadinessLevel" -Type DWord -Value 20
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Name "PreventDeviceMetadataFromNetwork" -Type DWord -Value 1
+	$Log.Text = "Applied Update optimizations"
+}
+
+$buttonVerboseLogon_Click = {
+	$Log.Text = "Please wait..."
+	REG Add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\" /V "verbosestatus" /T REG_DWORD /D 1 /F
+	$Log.Text = "Verbose logging enabled"
+}
+
+$buttonDisableStickyKeysHot_Click = {
+	$Log.Text = "Please wait..."
+	$MethodDefinition = @'
+[StructLayout(LayoutKind.Sequential)]
+public struct STICKYKEYS
+{
+    public uint cbSize;
+    public int dwFlags;
+}
+
+[DllImport("user32.dll")]
+public static extern int SystemParametersInfo(int uiAction, int uiParam, out STICKYKEYS pvParam, int fWinIni);
+'@
+	$get = 0x003A
+	$set = 0x003B
+	$WinApiVariable = Add-Type -MemberDefinition $MethodDefinition -Name 'Win32' -NameSpace '' -PassThru
+	$startupStickyKeys = New-Object -TypeName 'Win32+STICKYKEYS'
+	$startupStickyKeys.cbSize = [System.Runtime.InteropServices.Marshal]::SizeOf($startupStickyKeys)
+	[Win32]::SystemParametersInfo($get, [System.Runtime.InteropServices.Marshal]::SizeOf($startupStickyKeys), [ref]$startupStickyKeys, 0)
+	Write-Host "Current:"
+	$startupStickyKeys.dwFlags
+	Write-host "Set current flag to disabled (506)"
+	$startupStickyKeys.dwFlags = 506
+	[Win32]::SystemParametersInfo($set, [System.Runtime.InteropServices.Marshal]::SizeOf($startupStickyKeys), [ref]$startupStickyKeys, 0)
+	$Log.Text = "Sticky Keys disabled"
+}
+
+$buttonEnableUltimatePowerP_Click = {
+	
+	$Log.Text = "Please wait..."
+	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+	$Log.Text = "Ultimate Power Plan enabled"
+}
+
+$buttonDeleteTemporaryFiles_Click = {
+	
+	$Log.Text = "Please wait..."
+	Get-ChildItem -Path "C:\Windows\Temp" *.* -Recurse | Remove-Item -Force -Recurse
+	Get-ChildItem -Path $env:TEMP *.* -Recurse | Remove-Item -Force -Recurse
+	Get-ChildItem -Path "C:\Windows\Prefetch" *.* -Recurse | Remove-Item -Force -Recurse
+	$Log.Text = "TEMP, %TEMP% and PREFETCH folders cleared"
+}
+
+$buttonDisableBackgroundApp_Click = {
+	
+	$Log.Text = "Please wait..."
+	REG Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 1 /f
+	$Log.Text = "Background Apps disabled"
+}
+
+$buttonEnableDarkTheme_Click = {
+	
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0
+	$Log.Text = "Dark Theme enabled"
+	
+}
+
+$buttonDisableDarkTheme_Click = {
+	
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1
+	$Log.Text = "Dark Theme disabled"
+	
+}
+
+$buttonReboot_Click = {
+	
+	$Log.Text = "Rebooting..."
+	Restart-Computer
+}
+
+$buttonEnableBackgroundApps_Click = {
+	
+	$Log.Text = "Please wait..."
+	REG Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 0 /f
+	$Log.Text = "Background Apps enabled"
+}
+
+$buttonDisableWindowsAnimat_Click = {
+	
+	$Log.Text = "Please wait..."
+	Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "MenuShowDelay" -Type String -Value 200
+	Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Type Binary -Value ([byte[]](144, 18, 3, 128, 16, 0, 0, 0))
+	Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Type String -Value 0
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Type DWord -Value 3
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "EnableAeroPeek" -Type DWord -Value 0
+	$Log.Text = "Disabled Animations"
+}
+
+$buttonDisableHybernation_Click = {
+	
+	$Log.Text = "Please wait..."
+	powercfg.exe -h off
+	$Log.Text = "Disabled Hibernation"
+}
+
+$buttonEnableHibernation_Click = {
+	
+	$Log.Text = "Please wait..."
+	powercfg.exe -h on
+	$Log.Text = "Enabled Hibernation"
+}
+
+$labelXtremeShellV10_Click = {
+	
+	start https://neonity.hu/XtremeShell/
+}
+
+$buttonSupportMe_Click = {
+	
+	start https://www.youtube.com/channel/UCitjxOFmPTD-sa_440p7yBA/join
+}
+
+$labelXtremeShell231h_Click = {
+	
+	start https://xtremeshell.hu/
+}
+
+$tooltip1_Popup = [System.Windows.Forms.PopupEventHandler]{
+	#Event Argument: $_ = [System.Windows.Forms.PopupEventArgs]
+}
+
+$buttonUninstallMicrosoftSt_Click = {
+	$Log.Text = "Please wait..."
+	Get-AppxPackage -Name "Microsoft.WindowsStore" -AllUsers | Remove-AppxPackage
+	$Log.Text = "Microsoft Store uninstalled"
+}
+
+$buttonInstallMicrosoftStor_Click = {
+	
+	$Log.Text = "Please wait..."
+	Get-AppxPackage -allusers Microsoft.WindowsStore | Foreach { Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml" }
+	$Log.Text = "Microsoft Store installed"
+}
+
+$buttonCleanRecycleBin_Click = {
+	
+	$Log.Text = "Please wait..."
+	Clear-RecycleBin -Force
+	$Log.Text = "Recycle Bin cleared"
+}
+
+$buttonDisableDefender_Click = {
+	
+	$Log.Text = "Please wait..."
+	Set-MpPreference -DisableRealtimeMonitoring $true
+	Set-MpPreference -SubmitSamplesConsent NeverSend
+	Set-MpPreference -MAPSReporting Disable
+	New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1 -PropertyType DWORD -Force
+	$Log.Text = "Windows Defender disabled"
+}
+
+$Log_Click = {
+	
+	$Log.Text = ""
+}
+
+$buttonIntel_Click = {
+	
+	
+	start https://www.intel.com/content/www/us/en/download-center/home.html
+}
+
+$checkboxWindowsUpdate_CheckedChanged = {
+	
+	if ($checkboxWindowsUpdate.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		sc.exe config wuauserv start=enabled
+		sc.exe start wuauserv
+		$Log.Text = "Windows Update enabled"
+	}
+	if ($checkboxWindowsUpdate.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		sc.exe config wuauserv start=disabled
+		sc.exe stop wuauserv
+		$Log.Text = "Windows Update disabled"
+	}
+	
+}
+
+$checkboxDarkTheme_CheckedChanged = {
+	if ($checkboxDarkTheme.Checked -eq $true)
+	{
+		Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0
+		$Log.Text = "Dark Theme enabled"
+	}
+	if ($checkboxDarkTheme.Checked -eq $false)
+	{
+		Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1
+		$Log.Text = "Dark Theme disabled"
+	}
+	
+}
+
+$checkboxHibernation_CheckedChanged = {
+	
+	if ($checkboxHibernation.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		powercfg.exe -h on
+		$Log.Text = "Enabled Hibernation"
+	}
+	if ($checkboxHibernation.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		powercfg.exe -h off
+		$Log.Text = "Disabled Hibernation"
+	}
+}
+
+$checkboxBackgroundApps_CheckedChanged = {
+	
+	if ($checkboxBackgroundApps.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		REG Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 0 /f
+		$Log.Text = "Background Apps enabled"
+	}
+	if ($checkboxBackgroundApps.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		REG Add HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications /v GlobalUserDisabled /t REG_DWORD /d 1 /f
+		$Log.Text = "Background Apps disabled"
+	}
+}
+
+$checkboxVerboseLogon_CheckedChanged = {
+	
+	if ($checkboxVerboseLogon.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		REG Add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\" /V "verbosestatus" /T REG_DWORD /D 1 /F
+		$Log.Text = "Verbose logging enabled"
+	}
+	
+	if ($checkboxVerboseLogons.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		REG Add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\" /V "verbosestatus" /T REG_DWORD /D 0 /F
+		$Log.Text = "Verbose logging disabled"
+	}
+}
+
+$checkboxAnimations_CheckedChanged = {
+	
+	if ($checkboxAnimations.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Type String -Value 1
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Type DWord -Value 1
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Type DWord -Value 1
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Type DWord -Value 1
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Type DWord -Value 1
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "EnableAeroPeek" -Type DWord -Value 0
+		$Log.Text = "Enabled Animations"
+	}
+	if ($checkboxAnimations.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "MenuShowDelay" -Type String -Value 200
+		Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Type Binary -Value ([byte[]](144, 18, 3, 128, 16, 0, 0, 0))
+		Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "MinAnimate" -Type String -Value 0
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Type DWord -Value 0
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Type DWord -Value 0
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Type DWord -Value 0
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Type DWord -Value 3
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "EnableAeroPeek" -Type DWord -Value 0
+		$Log.Text = "Disabled Animations"
+	}
+}
+
+$checkboxWindowsDefender_CheckedChanged = {
+	
+	if ($checkboxWindowsDefender.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		Set-MpPreference -DisableRealtimeMonitoring $false
+		Set-MpPreference -SubmitSamplesConsent NeverSend
+		Set-MpPreference -MAPSReporting Disable
+		New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 0 -PropertyType DWORD -Force
+		reg add "HKLM\Software\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d "0" /f
+		$Log.Text = "Windows Defender enabled"
+	}
+	if ($checkboxWindowsDefender.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		Set-MpPreference -DisableRealtimeMonitoring $true
+		Set-MpPreference -SubmitSamplesConsent NeverSend
+		Set-MpPreference -MAPSReporting Disable
+		New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1 -PropertyType DWORD -Force
+		reg add "HKLM\Software\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d "1" /f
+		$Log.Text = "Windows Defender disabled"
+	}
+}
+
+$checkboxPowerThrottling_CheckedChanged = {
+	
+	if ($checkboxPowerThrottling.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d 0 /f
+		powercfg.exe -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+		$Log.Text = "Enabled Power Throttling"
+	}
+	if ($checkboxPowerThrottling.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f
+		powercfg.exe -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+		$Log.Text = "Disabled Power Throttling"
+	}
+}
+
+$checkboxClassicContextMenu_CheckedChanged = {
+	
+	if ($checkboxClassicContextMenu.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+		taskkill /f /im explorer.exe
+		Start-Sleep -Seconds 0.5
+		Start-Process explorer.exe
+		$Log.Text = "Classic context menu restored"
+	}
+	if ($checkboxClassicContextMenu.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		Get-Item "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" | Remove-Item -Force -Recurse
+		taskkill /f /im explorer.exe
+		Start-Sleep -Seconds 0.5
+		Start-Process explorer.exe
+		$Log.Text = "Original context menu restored"
+	}
+}
+
+$buttonInstallChrome_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install "googlechrome" -y
+	$Log.Text = "Google Chrome installed"
+	
+}
+
+$buttonInstallFirefox_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install "firefox" -y
+	$Log.Text = "Mozilla Firefox installed"
+	
+}
+
+$buttonInstallVivaldi_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install "vivaldi" -y
+	$Log.Text = "Vivaldi installed"
+	
+}
+
+$buttonCheckForUpdates_Click = {
+	
+	start https://xtremeshell.neonity.hu/
+	
+}
+
+$buttonInstallDiscord_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install "discord" -y
+	$Log.Text = "Discord installed"
+	
+}
+
+$buttonInstallChocolatey_Click = {
+	
+	$Log.Text = "Please wait..."
+	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+	$buttonInstallChocolatey.enabled = $false
+	$Log.Text = "Chocolatey installed"
+	
+}
+
+$buttonInstallBrave_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install brave -y
+	$Log.Text = "Brave installed"
+	
+}
+
+$buttonRestore_Click = {
+	$Log.Text = "Please wait..."
+	Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Type String -Value 1
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "EnableAeroPeek" -Type DWord -Value 0
+	$Log.Text = "Restored Animations"
+}
+
+$buttonInstallOperaGX_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install opera-gx -y
+	$Log.Text = "Opera GX installed"
+	
+}
+
+$buttonInstallMessenger_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install messenger -y
+	$Log.Text = "Messenger installed"
+	
+}
+
+$buttonInstallSlack_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install microsoft-teams -y
+	$Log.Text = "Microsoft Teams installed"
+	
+}
+
+$buttonInstallMicrosoftTeam_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install microsoft-teams -y
+	$Log.Text = "Microsoft Teams installed"
+	
+}
+
+$buttonInstallTeamViewer_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install teamviewer -y
+	$Log.Text = "TeamViewer installed"
+	
+}
+
+$buttonInstallVLC_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install vlc -y
+	$Log.Text = "VLC installed"
+}
+
+$buttonInstallVisualStudioC_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install vscode -y
+	$Log.Text = "Visual Studio Code installed"
+}
+
+$buttonInstallWinSCP_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install winscp -y
+	$Log.Text = "WinSCP installed"
+}
+
+$buttonInstallSpotify_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install spotify -y
+	$Log.Text = "Spotify installed"
+}
+
+$buttonUninstallSoftware_Click = {
+	#TODO: Place custom script here
+	start appwiz.cpl
+}
+
+$buttonDisableAds_Click = {
+	$Log.Text = "Please wait..."
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "22StokedOnIt.NotebookPro_ffs55s3hze5sr" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "2FE3CB00.PicsArt-PhotoStudio_crhqpqs3x1ygc" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "41038Axilesoft.ACGMediaPlayer_wxjjre7dryqb6" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "5CB722CC.SeekersNotesMysteriesofDarkwood_ypk0bew5psyra" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "7458BE2C.WorldofTanksBlitz_x4tje2y229k00" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "828B5831.HiddenCityMysteryofShadows_ytsefhwckbdv6" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "828B5831.TheSecretSociety-HiddenMystery_ytsefhwckbdv6" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "89006A2E.AutodeskSketchBook_tf1gferkr813w" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "9E2F88E3.Twitter_wgeqdkkx372wm" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "A278AB0D.AsphaltStreetStormRacing_h6adky7gbf63m" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "A278AB0D.DisneyMagicKingdoms_h6adky7gbf63m" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "A278AB0D.DragonManiaLegends_h6adky7gbf63m" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "A278AB0D.MarchofEmpires_h6adky7gbf63m" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "AdobeSystemsIncorporated.PhotoshopElements2018_ynb6jyjzte8ga" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "CAF9E577.Plex_aam28m9va5cke" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "DolbyLaboratories.DolbyAccess_rz1tebttyb220" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Drawboard.DrawboardPDF_gqbn7fs4pywxm" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Expedia.ExpediaHotelsFlightsCarsActivities_0wbx8rnn4qk5c" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Facebook.317180B0BB486_8xx8rvfyw5nnt" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Facebook.Facebook_8xx8rvfyw5nnt" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Facebook.InstagramBeta_8xx8rvfyw5nnt" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Fitbit.FitbitCoach_6mqt6hf9g46tw" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "flaregamesGmbH.RoyalRevolt2_g0q0z3kw54rap" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "GAMELOFTSA.Asphalt8Airborne_0pp20fcewvvtj" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "king.com.BubbleWitch3Saga_kgqvnymyfvs32" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "king.com.CandyCrushSaga_kgqvnymyfvs32" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "king.com.CandyCrushSodaSaga_kgqvnymyfvs32" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.AgeCastles_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.BingNews_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.BingSports_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.BingWeather_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "microsoft.microsoftskydrive_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.MinecraftUWP_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Microsoft.MSPaint_8wekyb3d8bbwe" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "NAVER.LINEwin8_8ptj331gd3tyt" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "Nordcurrent.CookingFever_m9bz608c1b9ra" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "SiliconBendersLLC.Sketchable_r2kxzpx527qgj" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "SpotifyAB.SpotifyMusic_zpdnekdrzrea0" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "ThumbmunkeysLtd.PhototasticCollage_nfy108tqq3p12" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "USATODAY.USATODAY_wy7mw3214mat8" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps" /v "WinZipComputing.WinZipUniversal_3ykzqggjzj4z0" /t REG_DWORD /d "0" /f
+	#explorer ads
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSyncProviderNotifications" /t REG_DWORD /d "0" /f
+	
+	$Log.Text = "Ads disabled"
+}
+
+$buttonDisableMouseAccelera_Click = {
+	$Log.Text = "Please wait..."
+	reg add "HKCU\Control Panel\Mouse" /v "MouseSpeed" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Control Panel\Mouse" /v "MouseThreshold1" /t REG_DWORD /d "0" /f
+	reg add "HKCU\Control Panel\Mouse" /v "MouseThreshold2" /t REG_DWORD /d "0" /f
+	$Log.Text = "Mouse acceleration disabled"
+}
+
+$checkboxFileExplorerOpensToT_CheckedChanged = {
+	
+	if ($checkboxFileExplorerOpensToT.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d "1" /f
+		$Log.Text = "File Explorer now opens to This PC"
+	}
+	if ($checkboxFileExplorerOpensToT.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d "0" /f
+		$Log.Text = "File Explorer now opens to Quick Access"
+	}
+}
+
+$checkboxPasswordRevealButton_CheckedChanged = {
+	
+	if ($checkboxPasswordRevealButton.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKLM\Software\Policies\Microsoft\Windows\CredUI" /v "DisablePasswordReveal" /t REG_DWORD /d "0" /f
+		$Log.Text = "Password reveal enabled"
+	}
+	if ($checkboxPasswordRevealButton.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKLM\Software\Policies\Microsoft\Windows\CredUI" /v "DisablePasswordReveal" /t REG_DWORD /d "1" /f
+		$Log.Text = "Password reveal disabled"
+	}
+}
+
+$checkboxAds_CheckedChanged = {
+	#TODO: Place custom script here
+	if ($checkboxAds.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSyncProviderNotifications" /t REG_DWORD /d "1" /f
+		$Log.Text = "Ads enabled"
+	}
+	if ($checkboxAds.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSyncProviderNotifications" /t REG_DWORD /d "0" /f
+		$Log.Text = "Ads disabled"
+	}
+}
+
+$checkboxWindowsErrorReportin_CheckedChanged = {
+	#TODO: Place custom script here
+	if ($checkboxWindowsErrorReportin.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "0" /f
+		$Log.Text = "Error reporting enabled"
+	}
+	if ($checkboxWindowsErrorReportin.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f
+		$Log.Text = "Error reporting disabled"
+	}
+}
+
+$checkboxGameBar_CheckedChanged = {
+	#TODO: Place custom script here
+	if ($checkboxGameBar.Checked -eq $true)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d "1" /f
+		reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "1" /f
+		$Log.Text = "Game Bar enabled"
+	}
+	if ($checkboxGameBar.Checked -eq $false)
+	{
+		$Log.Text = "Please wait..."
+		reg add "HKCU\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d "0" /f
+		reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
+		$Log.Text = "Game Bar disabled"
+	}
+}
+
+$buttonInstallSteam_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install steam-client -y
+	$Log.Text = "Steam installed"
+}
+
+$buttonInstallEpicGamesLaun_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install epicgameslauncher -y
+	$Log.Text = "Epic Games Launcher installed"
+}
+
+$buttonInstallNotepad_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install notepadplusplus -y
+	$Log.Text = "Notepad++ installed"
+}
+
+$buttonInstallGit_Click = {
+	
+	$Log.Text = "Please wait..."
+	choco install git -y
+	$Log.Text = "Git installed"
+	
+}
+
+$labelPC_Click = {
+	Start-Process msinfo32
+}
+
+$buttonSystemProperties_Click = {
+	#TODO: Place custom script here
+	start sysdm.cpl
+}
+
+$buttonUpdateRepairChocolat_Click = {
+	
+	$Log.Text = "Please wait..."
+	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+	choco upgrade chocolatey -y
+	$Log.Text = "Chocolatey updated"
+	
+}
+
+$button1_Click = {
+	
+	start "https://xtremeshell.hu"
+	
+}
